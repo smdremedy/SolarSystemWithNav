@@ -1,6 +1,5 @@
 package pl.szkoleniaandroid.solarsystem
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -12,34 +11,31 @@ import kotlinx.android.synthetic.main.solar_system_activity.*
 
 class SolarSystemActivity : AppCompatActivity(), MoonsFragment.Callback {
 
-    lateinit var repository: ObjectsRepository
+    val repository by lazy { SolarObjectsRepository(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.solar_system_activity)
         setSupportActionBar(toolbar)
-        repository = ObjectsRepository(this)
+        setupNavController()
+    }
 
-        val navController = findNavController(R.id.nav_host_fragment)
-        navController.addOnDestinationChangedListener { controller, destination, arguments ->
-            if (destination.id == R.id.nav_details) {
-                hideToolbar()
-            } else {
-                showToolbar()
+    private fun setupNavController() {
+        findNavController(R.id.nav_host_fragment).apply {
+            addOnDestinationChangedListener { _, destination, _ ->
+                if (destination.id == R.id.nav_details) {
+                    updateNavigationUiVisibility(visible = false)
+                } else {
+                    updateNavigationUiVisibility(visible = true)
+                }
             }
-
+            bottomNavigation.setupWithNavController(this)
         }
-        bottomNavigation.setupWithNavController(navController)
     }
 
-    fun hideToolbar() {
-        app_bar_layout.visibility = View.GONE
-        bottomNavigation.visibility = View.GONE
-    }
-
-    fun showToolbar() {
-        app_bar_layout.visibility = View.VISIBLE
-        bottomNavigation.visibility = View.VISIBLE
+    private fun updateNavigationUiVisibility(visible: Boolean) {
+        app_bar_layout.visibility = visible.asVisibility
+        bottomNavigation.visibility = visible.asVisibility
     }
 
     override fun showTabs(viewPager: ViewPager) {
@@ -55,23 +51,3 @@ class SolarSystemActivity : AppCompatActivity(), MoonsFragment.Callback {
 }
 
 val Fragment.repository get() = (requireActivity() as SolarSystemActivity).repository
-
-class ObjectsRepository(context: Context) {
-    val planets: List<SolarObject> = SolarObject.loadArrayFromJson(context, "planets")
-    val others: List<SolarObject> = SolarObject.loadArrayFromJson(context, "others")
-    val objectsWithMoons: List<SolarObject>
-
-    init {
-        objectsWithMoons = mutableListOf()
-        for (planet in planets) {
-            if (planet.hasMoons) {
-                objectsWithMoons.add(planet)
-            }
-        }
-        for (other in others) {
-            if (other.hasMoons) {
-                objectsWithMoons.add(other)
-            }
-        }
-    }
-}

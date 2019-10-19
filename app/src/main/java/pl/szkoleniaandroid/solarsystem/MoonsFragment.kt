@@ -9,12 +9,12 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager.widget.ViewPager
+import kotlinx.android.synthetic.main.moons_fragment.*
 
 
 class MoonsFragment : Fragment() {
 
-    private var adapter: PlanetsWithMoonPagerAdapter? = null
-
+    private lateinit var adapter: PlanetsWithMoonPagerAdapter
     private var callback: Callback? = null
 
     override fun onCreateView(
@@ -23,14 +23,12 @@ class MoonsFragment : Fragment() {
         savedInstanceState: Bundle?
     ) = inflater.inflate(R.layout.moons_fragment, container, false)!!
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        adapter = PlanetsWithMoonPagerAdapter(fragmentManager!!, repository.objectsWithMoons)
 
-        val pager = view.findViewById<ViewPager>(R.id.viewpager)
-        pager.adapter = adapter
-        callback?.showTabs(pager)
+        adapter = PlanetsWithMoonPagerAdapter(fragmentManager!!, repository.objectsWithMoons)
+        viewpager.adapter = adapter
+        callback?.showTabs(viewpager)
     }
 
     override fun onDestroyView() {
@@ -43,38 +41,24 @@ class MoonsFragment : Fragment() {
         callback = context as Callback
     }
 
-
     override fun onDetach() {
         super.onDetach()
         callback = null
     }
 
-
     interface Callback {
         fun showTabs(viewPager: ViewPager)
-
         fun hideTabs()
     }
-
 }
-
 
 class PlanetsWithMoonPagerAdapter(
     fm: FragmentManager,
-    private val planetsWithMoon: List<SolarObject>
+    private val planetsWithMoon: Array<SolarObject>
 ) : FragmentStatePagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getCount() = planetsWithMoon.size
-
-
-    override fun getItem(position: Int): Fragment {
-
-        var moons = planetsWithMoon[position].moons
-
-        return PlanetsFragment.newInstance(moons.toTypedArray())
-    }
-
-    override fun getPageTitle(position: Int): CharSequence {
-        return planetsWithMoon[position].name
-    }
+    override fun getPageTitle(position: Int) = planetsWithMoon[position].name
+    override fun getItem(position: Int) =
+        PlanetsFragment.newInstance(planetsWithMoon[position].moons)
 }

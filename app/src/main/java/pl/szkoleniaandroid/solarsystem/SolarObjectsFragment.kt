@@ -29,13 +29,11 @@ abstract class SolarObjectsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         solarObjectsAdapter = SolarObjectsAdapter()
         solarObjectsAdapter.setObjects(createObjects())
-        solarObjectsAdapter.objectClickedListener = object: ObjectClickedListener {
+        solarObjectsAdapter.objectClickedListener = object : ObjectClickedListener {
             override fun objectClicked(clickedObject: SolarObject) {
-
                 val args = ObjectDetailsFragmentArgs.Builder(clickedObject).build()
                 findNavController().navigate(R.id.nav_details, args.toBundle())
             }
-
         }
         objectsRecyclerView.adapter = solarObjectsAdapter
         objectsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
@@ -46,19 +44,15 @@ abstract class SolarObjectsFragment : Fragment() {
         solarObjectsAdapter.objectClickedListener = null
     }
 
-
     abstract fun createObjects(): Array<SolarObject>
 }
 
 class SolarObjectsAdapter : RecyclerView.Adapter<SolarObjectsViewHolder>(),
     ObjectClickedListener {
-    override fun objectClicked(clickedObject: SolarObject) {
-        objectClickedListener?.objectClicked(clickedObject)
-    }
-
-    private val objects = mutableListOf<SolarObject>()
 
     var objectClickedListener: ObjectClickedListener? = null
+
+    private val objects = mutableListOf<SolarObject>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SolarObjectsViewHolder {
         val itemView =
@@ -70,6 +64,10 @@ class SolarObjectsAdapter : RecyclerView.Adapter<SolarObjectsViewHolder>(),
 
     override fun onBindViewHolder(holder: SolarObjectsViewHolder, position: Int) {
         holder.setSolarObject(objects[position])
+    }
+
+    override fun objectClicked(clickedObject: SolarObject) {
+        objectClickedListener?.objectClicked(clickedObject)
     }
 
     fun setObjects(objectsToSet: Array<SolarObject>) {
@@ -90,8 +88,8 @@ class SolarObjectsViewHolder(
 
     private lateinit var solarObject: SolarObject
 
-    val itemImageView: ImageView = itemView.findViewById(R.id.itemImageView)
-    val itemTextView: TextView = itemView.findViewById(R.id.itemTextView)
+    private val itemImageView: ImageView = itemView.findViewById(R.id.itemImageView)
+    private val itemTextView: TextView = itemView.findViewById(R.id.itemTextView)
 
     init {
         itemView.setOnClickListener { objectClickedListener.objectClicked(solarObject) }
@@ -101,7 +99,7 @@ class SolarObjectsViewHolder(
         this.solarObject = solarObject
 
         itemTextView.text = solarObject.name
-        itemImageView.load("file:///android_asset/" + solarObject.image) {
+        itemImageView.load(solarObject.imagePath) {
             placeholder(R.drawable.planet_placeholder)
         }
     }
