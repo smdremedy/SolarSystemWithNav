@@ -35,7 +35,9 @@ class SolarSystemActivity : AppCompatActivity(), MoonsFragment.Callback {
 
     private fun updateNavigationUiVisibility(visible: Boolean) {
         app_bar_layout.visibility = visible.asVisibility
-        bottomNavigation.visibility = visible.asVisibility
+        window.decorView.post {
+            bottomNavigation.visibility = visible.asVisibility
+        }
     }
 
     override fun showTabs(viewPager: ViewPager) {

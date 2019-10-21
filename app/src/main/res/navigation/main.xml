@@ -5,6 +5,9 @@
     android:id="@+id/main"
     app:startDestination="@id/nav_planets">
 
+    <activity android:id="@+id/activity"
+        tools:layout="@layout/solar_system_activity"/>
+
     <fragment
         android:id="@+id/nav_planets"
         android:name="pl.szkoleniaandroid.solarsystem.PlanetsFragment"
@@ -17,16 +20,21 @@
             app:nullable="true" />
 
     </fragment>
+
     <fragment
         android:id="@+id/nav_others"
-        android:name="pl.szkoleniaandroid.solarsystem.OthersFragment" />
+        android:name="pl.szkoleniaandroid.solarsystem.OthersFragment"
+        tools:layout="@layout/solar_objects_fragment" />
+
     <fragment
         android:id="@+id/nav_moons"
-        android:name="pl.szkoleniaandroid.solarsystem.MoonsFragment" />
+        android:name="pl.szkoleniaandroid.solarsystem.MoonsFragment"
+        tools:layout="@layout/solar_objects_fragment" />
 
     <fragment
         android:id="@+id/nav_details"
-        android:name="pl.szkoleniaandroid.solarsystem.ObjectDetailsFragment">
+        android:name="pl.szkoleniaandroid.solarsystem.ObjectDetailsFragment"
+        tools:layout="@layout/object_details_fragment">
         <argument
             android:name="solarObject"
             app:argType="pl.szkoleniaandroid.solarsystem.SolarObject" />
