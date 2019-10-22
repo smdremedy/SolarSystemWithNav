@@ -9,14 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
-import androidx.core.text.HtmlCompat
-import androidx.core.text.HtmlCompat.FROM_HTML_MODE_LEGACY
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import coil.api.load
 import kotlinx.android.synthetic.main.object_details_content.*
 import kotlinx.android.synthetic.main.object_details_fragment.*
 import pl.szkoleniaandroid.solarsystem.databinding.ObjectDetailsFragmentBinding
@@ -40,6 +37,16 @@ class ObjectDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.so = args.solarObject
+        binding.listener = object: ObjectClickedListener {
+            override fun objectClicked(clickedObject: SolarObject) {
+
+                clickedObject.video?.let {
+                    watchYoutubeVideo(clickedObject.video)
+                }
+
+            }
+
+        }
 
         setupToolbar()
         loadDetails()
@@ -60,16 +67,13 @@ class ObjectDetailsFragment : Fragment() {
 
     private fun loadDetails() {
         if (!args.solarObject.video.isNullOrEmpty()) {
-            fab.setOnClickListener { watchYoutubeVideo(args.solarObject.video!!) }
+            //fab.setOnClickListener { watchYoutubeVideo(args.solarObject.video!!) }
         } else {
             val p = fab.layoutParams as CoordinatorLayout.LayoutParams
             p.anchorId = View.NO_ID
             fab.layoutParams = p
             fab.isVisible = false
         }
-        val textWithHtml = requireContext().loadStringFromAssets(args.solarObject.textFilename)
-        detailsTextView.text = HtmlCompat.fromHtml(textWithHtml, FROM_HTML_MODE_LEGACY)
-
 
     }
 
@@ -106,7 +110,7 @@ class ObjectDetailsFragment : Fragment() {
         )
     }
 
-    private fun watchYoutubeVideo(id: String) {
+    fun watchYoutubeVideo(id: String) {
         try {
             val intent = Intent(Intent.ACTION_VIEW, Uri.parse("vnd.youtube:$id"))
             startActivity(intent)

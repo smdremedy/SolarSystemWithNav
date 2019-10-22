@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/objectsRecyclerView"
+    <data>
+
+        <variable
+            name="fragment"
+            type="pl.szkoleniaandroid.solarsystem.SolarObjectsFragment" />
+    </data>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
-        tools:listitem="@layout/solar_object_item"
-        tools:spanCount="2" />
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/objectsRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:itemBinding="@{fragment.itemBinding}"
+            app:items="@{fragment.objects}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2"
+            tools:listitem="@layout/solar_object_item" />
 
 
-</LinearLayout>
+    </LinearLayout>
+</layout>

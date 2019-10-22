@@ -6,43 +6,49 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.databinding.ObservableArrayList
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.api.load
 import kotlinx.android.synthetic.main.solar_objects_fragment.*
+import me.tatarka.bindingcollectionadapter2.ItemBinding
+import pl.szkoleniaandroid.solarsystem.databinding.SolarObjectsFragmentBinding
 
 abstract class SolarObjectsFragment : Fragment() {
 
     private lateinit var solarObjectsAdapter: SolarObjectsAdapter
+    lateinit var binding: SolarObjectsFragmentBinding
+
+    val objects = ObservableArrayList<SolarObject>()
+    val itemBinding = ItemBinding.of<SolarObject>(BR.item, R.layout.solar_object_item)
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.solar_objects_fragment, container, false)
+        binding = SolarObjectsFragmentBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        solarObjectsAdapter = SolarObjectsAdapter()
-        solarObjectsAdapter.setObjects(createObjects())
-        solarObjectsAdapter.objectClickedListener = object : ObjectClickedListener {
-            override fun objectClicked(clickedObject: SolarObject) {
-                val args = ObjectDetailsFragmentArgs.Builder(clickedObject).build()
-                findNavController().navigate(R.id.nav_details, args.toBundle())
-            }
-        }
-        objectsRecyclerView.adapter = solarObjectsAdapter
-        objectsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
+        binding.fragment = this
+        objects.addAll(createObjects())
+//        solarObjectsAdapter = SolarObjectsAdapter()
+//        solarObjectsAdapter.setObjects(createObjects())
+//        solarObjectsAdapter.objectClickedListener = object : ObjectClickedListener {
+//            override fun objectClicked(clickedObject: SolarObject) {
+//                val args = ObjectDetailsFragmentArgs.Builder(clickedObject).build()
+//                findNavController().navigate(R.id.nav_details, args.toBundle())
+//            }
+//        }
+//        objectsRecyclerView.adapter = solarObjectsAdapter
+//        objectsRecyclerView.layoutManager = GridLayoutManager(requireContext(), 2)
     }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        solarObjectsAdapter.objectClickedListener = null
-    }
 
     abstract fun createObjects(): Array<SolarObject>
 }
