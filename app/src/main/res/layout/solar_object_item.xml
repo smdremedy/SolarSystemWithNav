@@ -21,13 +21,13 @@
             android:adjustViewBounds="true"
             android:background="@android:color/black"
             android:scaleType="centerInside"
-            tools:src="@tools:sample/avatars" />
+            tools:src="@sample/images" />
 
         <TextView
             android:id="@+id/itemTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="test" />
+            tools:text="@sample/solar.json/planets/name" />
 
     </LinearLayout>
 
