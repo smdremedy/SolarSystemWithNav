@@ -26,7 +26,7 @@ class MoonsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        adapter = PlanetsWithMoonPagerAdapter(fragmentManager!!, repository.objectsWithMoons)
+        adapter = PlanetsWithMoonPagerAdapter(childFragmentManager!!, repository.objectsWithMoons)
         viewpager.adapter = adapter
         callback?.showTabs(viewpager)
     }

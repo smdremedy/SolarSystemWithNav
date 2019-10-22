@@ -19,19 +19,27 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import coil.api.load
 import kotlinx.android.synthetic.main.object_details_content.*
 import kotlinx.android.synthetic.main.object_details_fragment.*
+import pl.szkoleniaandroid.solarsystem.databinding.ObjectDetailsFragmentBinding
 
 class ObjectDetailsFragment : Fragment() {
 
     private val args by navArgs<ObjectDetailsFragmentArgs>()
+    lateinit var binding: ObjectDetailsFragmentBinding
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = inflater.inflate(R.layout.object_details_fragment, container, false)!!
+    ): View {
+
+        binding = ObjectDetailsFragmentBinding.inflate(inflater, container, false)
+        return binding.root
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        binding.so = args.solarObject
 
         setupToolbar()
         loadDetails()
@@ -39,8 +47,8 @@ class ObjectDetailsFragment : Fragment() {
     }
 
     private fun setupToolbar() {
-        toolbar.title = args.solarObject.name
-        toolbar_layout.title = args.solarObject.name
+        //binding.toolbar.title = args.solarObject.name
+        //toolbar_layout.title = args.solarObject.name
         //hack if we want to use toolbar without setting as support
         toolbar.navigationIcon =
             ContextCompat.getDrawable(requireContext(), R.drawable.ic_arrow_back)
@@ -62,9 +70,7 @@ class ObjectDetailsFragment : Fragment() {
         val textWithHtml = requireContext().loadStringFromAssets(args.solarObject.textFilename)
         detailsTextView.text = HtmlCompat.fromHtml(textWithHtml, FROM_HTML_MODE_LEGACY)
 
-        detailImageView.load(args.solarObject.imagePath) {
-            placeholder(R.drawable.planet_placeholder)
-        }
+
     }
 
 
