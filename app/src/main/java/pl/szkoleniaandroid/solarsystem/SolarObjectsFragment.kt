@@ -21,8 +21,8 @@ abstract class SolarObjectsFragment : Fragment() {
     private lateinit var solarObjectsAdapter: SolarObjectsAdapter
     lateinit var binding: SolarObjectsFragmentBinding
 
-    val objects = ObservableArrayList<SolarObject>()
-    val itemBinding = ItemBinding.of<SolarObject>(BR.item, R.layout.solar_object_item)
+    private val viewModel = SolarObjectViewModel()
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,8 +35,8 @@ abstract class SolarObjectsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.fragment = this
-        objects.addAll(createObjects())
+        binding.vm = viewModel
+        viewModel.objects.addAll(createObjects())
 //        solarObjectsAdapter = SolarObjectsAdapter()
 //        solarObjectsAdapter.setObjects(createObjects())
 //        solarObjectsAdapter.objectClickedListener = object : ObjectClickedListener {
@@ -51,6 +51,12 @@ abstract class SolarObjectsFragment : Fragment() {
 
 
     abstract fun createObjects(): Array<SolarObject>
+}
+
+class SolarObjectViewModel {
+    val objects = ObservableArrayList<SolarObject>()
+    val itemBinding = ItemBinding.of<SolarObject>(BR.item, R.layout.solar_object_item)
+
 }
 
 class SolarObjectsAdapter : RecyclerView.Adapter<SolarObjectsViewHolder>(),

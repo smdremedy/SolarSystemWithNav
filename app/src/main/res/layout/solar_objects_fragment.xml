@@ -6,8 +6,8 @@
     <data>
 
         <variable
-            name="fragment"
-            type="pl.szkoleniaandroid.solarsystem.SolarObjectsFragment" />
+            name="vm"
+            type="pl.szkoleniaandroid.solarsystem.SolarObjectViewModel" />
     </data>
 
     <LinearLayout
@@ -19,8 +19,8 @@
             android:id="@+id/objectsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:itemBinding="@{fragment.itemBinding}"
-            app:items="@{fragment.objects}"
+            app:itemBinding="@{vm.itemBinding}"
+            app:items="@{vm.objects}"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
             tools:listitem="@layout/solar_object_item" />
